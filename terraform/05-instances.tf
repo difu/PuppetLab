@@ -29,7 +29,7 @@ module "puppet-testlab-asgroup" {
 
   image_id                     = data.aws_ami.amazon_linux.id
   instance_type                = "t2.micro"
-  security_groups              = [aws_security_group.puppet-public-ssh.id, aws_security_group.puppet-public-ssl.id]
+  security_groups              = [aws_security_group.puppet-public-ssh.id, aws_security_group.puppet-public-ssl.id, aws_security_group.puppet-public-puppet.id]
   associate_public_ip_address  = true
   recreate_asg_when_lc_changes = true
   key_name                     = var.key_name
@@ -80,7 +80,8 @@ resource "aws_instance" "puppetmaster" {
   associate_public_ip_address = "true"
   subnet_id = aws_subnet.public-a.id
   vpc_security_group_ids = [
-    aws_security_group.puppet-public-ssh.id]
+    aws_security_group.puppet-public-ssh.id,
+    aws_security_group.puppet-public-puppet.id]
   key_name = var.key_name
   tags = {
     Name = "Puppet master"

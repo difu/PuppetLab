@@ -125,6 +125,30 @@ resource "aws_security_group" "puppet-public-ssl" {
   }
 }
 
+resource "aws_security_group" "puppet-public-puppet" {
+  name        = "${var.project}-public-puppet"
+  description = "Security group that allows puppet traffic internally"
+  vpc_id      = aws_vpc.puppet_vpc.id
+
+  egress {
+    from_port   = "8140"
+    to_port     = "8140"
+    protocol    = "6"
+    cidr_blocks = [var.vpc_cidr]
+  }
+
+  ingress {
+    from_port   = "8140"
+    to_port     = "8140"
+    protocol    = "6"
+    cidr_blocks = [var.vpc_cidr]
+  }
+
+  tags = {
+    name    = "${var.project} puppet traffic"
+    project = var.project
+  }
+}
 
 resource "aws_vpc_dhcp_options" "mydhcp" {
     domain_name = var.dns_zone_name
@@ -152,5 +176,6 @@ resource "aws_route53_record" "database" {
    name = "puppetmaster.${var.dns_zone_name}"
    type = "A"
    ttl = "300"
-   records = [aws_instance.puppetmaster.private_ip]
+   records = [
+     aws_instance.puppetmaster.private_ip]
 }
