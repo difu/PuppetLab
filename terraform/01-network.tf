@@ -10,21 +10,21 @@ resource "aws_internet_gateway" "puppet-igw" {
 //  Create a public subnet for each AZ.
 resource "aws_subnet" "public-a" {
   vpc_id                  = aws_vpc.puppet_vpc.id
-  cidr_block              = "${var.public_subnet_cidr1}"
-  availability_zone       = "${lookup(var.subnetaz1, var.aws_region)}"
+  cidr_block              = var.public_subnet_cidr1
+  availability_zone       = lookup(var.subnetaz1, var.aws_region)
   map_public_ip_on_launch = true
   depends_on              = ["aws_internet_gateway.puppet-igw"]
 
   tags = {
     name    = "${var.project} Public Subnet A"
-    project = "${var.project}"
+    project = var.project
   }
 }
 
 resource "aws_subnet" "public-b" {
   vpc_id                  = aws_vpc.puppet_vpc.id
-  cidr_block              = "${var.public_subnet_cidr2}"
-  availability_zone       = "${lookup(var.subnetaz2, var.aws_region)}"
+  cidr_block              = var.public_subnet_cidr2
+  availability_zone       = lookup(var.subnetaz2, var.aws_region)
   map_public_ip_on_launch = true
   depends_on              = ["aws_internet_gateway.puppet-igw"]
 
@@ -36,8 +36,8 @@ resource "aws_subnet" "public-b" {
 
 resource "aws_subnet" "public-c" {
   vpc_id                  = aws_vpc.puppet_vpc.id
-  cidr_block              = "${var.public_subnet_cidr3}"
-  availability_zone       = "${lookup(var.subnetaz3, var.aws_region)}"
+  cidr_block              = var.public_subnet_cidr3
+  availability_zone       = lookup(var.subnetaz3, var.aws_region)
   map_public_ip_on_launch = true
   depends_on              = ["aws_internet_gateway.puppet-igw"]
 

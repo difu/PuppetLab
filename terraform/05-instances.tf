@@ -32,7 +32,7 @@ module "puppet-testlab-asgroup" {
   security_groups              = [aws_security_group.puppet-public-ssh.id, aws_security_group.puppet-public-ssl.id]
   associate_public_ip_address  = true
   recreate_asg_when_lc_changes = true
-  key_name                     = "eu-central-1_KP"
+  key_name                     = var.key_name
 
   ebs_block_device = [
     {
