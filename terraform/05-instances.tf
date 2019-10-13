@@ -73,3 +73,16 @@ module "puppet-testlab-asgroup" {
     extra_tag2 = "extra_value2"
   }
 }
+
+resource "aws_instance" "puppetmaster" {
+  ami = data.aws_ami.amazon_linux.id
+  instance_type = "t2.micro"
+  associate_public_ip_address = "true"
+  subnet_id = aws_subnet.public-a.id
+  vpc_security_group_ids = [
+    aws_security_group.puppet-public-ssh.id]
+  key_name = var.key_name
+  tags = {
+    Name = "Puppet master"
+  }
+}

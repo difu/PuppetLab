@@ -124,3 +124,33 @@ resource "aws_security_group" "puppet-public-ssl" {
     project = var.project
   }
 }
+
+
+resource "aws_vpc_dhcp_options" "mydhcp" {
+    domain_name = var.dns_zone_name
+    domain_name_servers = ["AmazonProvidedDNS"]
+    tags = {
+      Name = "My internal DHCP name"
+    }
+}
+
+resource "aws_vpc_dhcp_options_association" "dns_resolver" {
+    vpc_id = aws_vpc.puppet_vpc.id
+    dhcp_options_id = aws_vpc_dhcp_options.mydhcp.id
+}
+
+resource "aws_route53_zone" "main" {
+  name = var.dns_zone_name
+  vpc {
+    vpc_id = aws_vpc.puppet_vpc.id
+  }
+  comment = "Managed by terraform"
+}
+
+resource "aws_route53_record" "database" {
+   zone_id = aws_route53_zone.main.zone_id
+   name = "puppetmaster.${var.dns_zone_name}"
+   type = "A"
+   ttl = "300"
+   records = [aws_instance.puppetmaster.private_ip]
+}

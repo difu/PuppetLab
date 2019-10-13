@@ -56,3 +56,8 @@ variable "key_name" {
   description = "The name of the key to user for ssh access"
   default     = "eu-central-1_KP"
 }
+
+variable "dns_zone_name" {
+  default = "difu.internal"
+  description = "the internal dns name"
+}
