@@ -23,7 +23,7 @@ data "aws_ami" "amazon_linux" {
 module "puppet-testlab-asgroup" {
   source = "github.com/terraform-aws-modules/terraform-aws-autoscaling"
 
-  name = "example-with-ec2"
+  name = "puppet-nodes-group-a"
 
   lc_name = "puppet-nodes-lc"
 
