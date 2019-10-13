@@ -1,0 +1,14 @@
+
+.gitignore
+.idea/.gitignore
+.idea/PuppetLab.iml
+.idea/aws.xml
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+Would skip repository terraform/.terraform/modules/example
+terraform/.terraform/modules/modules.json
+terraform/.terraform/plugins
+/terraform/terraform.tfstate
+/terraform/terraform.tfstate.backup
