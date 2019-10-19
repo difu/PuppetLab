@@ -30,7 +30,7 @@ resource "aws_subnet" "public-b" {
 
   tags = {
     name    = "${var.project} Public Subnet B"
-    project = "${var.project}"
+    project = var.project
   }
 }
 
@@ -168,7 +168,7 @@ resource "aws_route53_zone" "main" {
   vpc {
     vpc_id = aws_vpc.puppet_vpc.id
   }
-  comment = "Managed by terraform"
+  comment = "Managed by x"
 }
 
 resource "aws_route53_record" "database" {
