@@ -61,3 +61,13 @@ variable "dns_zone_name" {
   default = "difu.internal"
   description = "the internal dns name"
 }
+
+variable "group_a_min_servers" {
+  default = "1"
+  description = "Minimum number of hosts of group a"
+}
+
+variable "group_a_max_servers" {
+  default = "1"
+  description = "Maximum number of hosts of group a"
+}

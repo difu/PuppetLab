@@ -55,9 +55,9 @@ module "puppet-testlab-asgroup" {
   asg_name                  = "puppet-nodes-asg"
   vpc_zone_identifier       = [aws_subnet.public-a.id,aws_subnet.public-b.id,aws_subnet.public-c.id]
   health_check_type         = "EC2"
-  min_size                  = 0
-  max_size                  = 3
-  desired_capacity          = 3
+  min_size                  = var.group_a_min_servers
+  max_size                  = var.group_a_max_servers
+  desired_capacity          = 1
   wait_for_capacity_timeout = 0
 
   tags = [
