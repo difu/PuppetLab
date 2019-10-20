@@ -74,6 +74,10 @@ module "puppet-testlab-asgroup" {
   }
 }
 
+data "template_file" "puppet_master_init" {
+    template = file("user_data/puppet_master.sh")
+}
+
 resource "aws_instance" "puppetmaster" {
   ami = data.aws_ami.amazon_linux.id
   instance_type = "t2.micro"
@@ -82,6 +86,7 @@ resource "aws_instance" "puppetmaster" {
   vpc_security_group_ids = [
     aws_security_group.puppet-public-ssh.id,
     aws_security_group.puppet-public-puppet.id]
+  user_data = base64encode(data.template_file.puppet_master_init.rendered)
   key_name = var.key_name
   tags = {
     Name = "Puppet master"
