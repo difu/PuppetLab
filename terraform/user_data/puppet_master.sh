@@ -2,7 +2,7 @@
 
 cat <<"__EOF__" > /etc/sysconfig/network
 NETWORKING=yes
-HOSTNAME=puppetmaster.difu.internal
+HOSTNAME=puppetmaster.${internal_domain}
 NOZEROCONF=yes
 __EOF__
 

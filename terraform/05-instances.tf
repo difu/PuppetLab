@@ -76,6 +76,10 @@ module "puppet-testlab-asgroup" {
 
 data "template_file" "puppet_master_init" {
     template = file("user_data/puppet_master.sh")
+  template = file("user_data/puppet_master.sh")
+  vars = {
+    internal_domain = var.dns_zone_name
+  }
 }
 
 resource "aws_instance" "puppetmaster" {
