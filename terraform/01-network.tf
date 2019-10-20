@@ -171,7 +171,7 @@ resource "aws_route53_zone" "main" {
   comment = "Managed by x"
 }
 
-resource "aws_route53_record" "database" {
+resource "aws_route53_record" "puppetmaster" {
    zone_id = aws_route53_zone.main.zone_id
    name = "puppetmaster.${var.dns_zone_name}"
    type = "A"
