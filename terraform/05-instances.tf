@@ -19,6 +19,12 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
+data "template_file" "puppet_client_init" {
+  template = file("user_data/puppet_client.sh")
+  vars = {
+    internal_domain = var.dns_zone_name
+  }
+}
 
 module "puppet-testlab-asgroup" {
   source = "github.com/terraform-aws-modules/terraform-aws-autoscaling"
@@ -33,6 +39,7 @@ module "puppet-testlab-asgroup" {
   associate_public_ip_address  = true
   recreate_asg_when_lc_changes = true
   key_name                     = var.key_name
+  user_data                    = base64encode(data.template_file.puppet_client_init.rendered)
 
   //  ebs_block_device = [
   //    {
