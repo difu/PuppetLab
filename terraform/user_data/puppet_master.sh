@@ -24,6 +24,7 @@ yum -y install puppetserver
 /opt/puppetlabs/bin/puppet config set dns_alt_names "puppetmaster.difu.internal,puppetmaster" --section master
 /opt/puppetlabs/bin/puppet config set certname puppetmaster.difu.internal
 /opt/puppetlabs/bin/puppet config set server puppetmaster.difu.internal
+/opt/puppetlabs/bin/puppet config set autosign true --section master
 
 chkconfig puppetserver on
 service puppetserver start
