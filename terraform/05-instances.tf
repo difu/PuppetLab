@@ -40,6 +40,7 @@ module "puppet-testlab-asgroup" {
   recreate_asg_when_lc_changes = true
   key_name                     = var.key_name
   user_data                    = base64encode(data.template_file.puppet_client_init.rendered)
+  iam_instance_profile         = aws_iam_instance_profile.puppet-client-instance-profile.name
 
   //  ebs_block_device = [
   //    {
