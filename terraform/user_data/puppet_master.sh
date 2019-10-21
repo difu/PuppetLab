@@ -15,8 +15,17 @@ __EOF__
 
 chmod 644 /etc/hosts
 
-yum -y install puppet-server
-chkconfig puppetmaster on
-service puppetmaster start
+yum -y remove java-1.7.0-openjdk -y
 
-reboot
+rpm -Uvh http://yum.puppetlabs.com/puppet-release-el-6.noarch.rpm
+
+yum -y install puppetserver
+
+/opt/puppetlabs/bin/puppet config set dns_alt_names "puppetmaster.difu.internal,puppetmaster" --section master
+/opt/puppetlabs/bin/puppet config set certname puppetmaster.difu.internal
+/opt/puppetlabs/bin/puppet config set server puppetmaster.difu.internal
+
+chkconfig puppetserver on
+service puppetserver start
+
+# reboot

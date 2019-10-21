@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
+rpm -Uvh http://yum.puppetlabs.com/puppet-release-el-6.noarch.rpm
 sudo yum -y install puppet
 
-cat <<"__EOF__" > /etc/puppet/puppet.conf
+cat <<"__EOF__" > /etc/puppetlabs/puppet/puppet.conf
 [main]
     # The Puppet log directory.
     # The default value is '$vardir/log'.
@@ -32,4 +33,6 @@ cat <<"__EOF__" > /etc/puppet/puppet.conf
     localconfig = $vardir/localconfig
 __EOF__
 
-chmod 644 /etc/puppet/puppet.conf
+chmod 644 /etc/puppetlabs/puppet/puppet.conf
+
+/opt/puppetlabs/bin/puppet resource cron puppet-agent ensure=present user=root minute=* command='/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize --splay --splaylimit 60'
