@@ -35,4 +35,15 @@ __EOF__
 
 chmod 644 /etc/puppetlabs/puppet/puppet.conf
 
+/opt/puppetlabs/bin/puppet module install bryana-ec2tagfacts --version 0.3.0
+
+mkdir /etc/puppetlabs/facter
+
+cat <<"__EOF__" > /etc/puppetlabs/facter/facter.conf
+global : {
+    custom-dir       : [ "/etc/puppetlabs/code/environments/production/modules/ec2tagfacts/lib/facter" ],
+}
+__EOF__
+
 /opt/puppetlabs/bin/puppet resource cron puppet-agent ensure=present user=root minute=* command='/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize --splay --splaylimit 60'
+
