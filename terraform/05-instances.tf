@@ -92,6 +92,7 @@ data "template_file" "puppet_master_init" {
 resource "aws_instance" "puppetmaster" {
   ami                         = data.aws_ami.amazon_linux.id
   instance_type               = "t2.medium"
+  iam_instance_profile        = aws_iam_instance_profile.puppet-master-instance-profile.name
   associate_public_ip_address = "true"
   subnet_id                   = aws_subnet.public-a.id
   vpc_security_group_ids = [

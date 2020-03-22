@@ -18,6 +18,26 @@ resource "aws_iam_role" "puppet-client-instance-role" {
 EOF
 }
 
+resource "aws_iam_role" "puppet-master-instance-role" {
+  name = "puppet-master-instance-role"
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+                "Service": "ec2.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
+        }
+    ]
+}
+EOF
+}
+
 resource "aws_iam_policy" "describe-tags" {
   name        = "describe-tags"
   path        = "/EC2/"
@@ -37,15 +57,45 @@ resource "aws_iam_policy" "describe-tags" {
     EOF
 }
 
+resource "aws_iam_policy" "describe-instances" {
+  name        = "describe-instances"
+  path        = "/EC2/"
+  description = "This policy allows to describe instances"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [ "ec2:DescribeInstances"],
+      "Resource": ["*"]
+    }
+  ]
+}
+    EOF
+}
+
 //  Attach the policies to the role.
-resource "aws_iam_policy_attachment" "instance-descibe-tags" {
-  name       = "instance-descibe-tags"
+resource "aws_iam_policy_attachment" "instance-describe-tags" {
+  name       = "instance-describe-tags"
   roles      = [aws_iam_role.puppet-client-instance-role.name]
   policy_arn = aws_iam_policy.describe-tags.arn
+}
+
+resource "aws_iam_policy_attachment" "instance-describe-instances" {
+  name       = "instance-describe-instances"
+  roles      = [aws_iam_role.puppet-master-instance-role.name]
+  policy_arn = aws_iam_policy.describe-instances.arn
 }
 
 //  Create a instance profile for the role.
 resource "aws_iam_instance_profile" "puppet-client-instance-profile" {
   name = "puppet-client-instance-profile"
   role = aws_iam_role.puppet-client-instance-role.name
+}
+
+resource "aws_iam_instance_profile" "puppet-master-instance-profile" {
+  name = "puppet-master-instance-profile"
+  role = aws_iam_role.puppet-master-instance-role.name
 }
