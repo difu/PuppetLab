@@ -23,12 +23,33 @@ rpm -Uvh https://yum.puppet.com/puppet-tools-release-el-6.noarch.rpm
 yum -y install puppetserver
 yum -y install pdk
 
-/opt/puppetlabs/bin/puppet config set dns_alt_names "puppetmaster.difu.internal,puppetmaster" --section master
-/opt/puppetlabs/bin/puppet config set certname puppetmaster.difu.internal
-/opt/puppetlabs/bin/puppet config set server puppetmaster.difu.internal
+/opt/puppetlabs/bin/puppet config set dns_alt_names "puppetmaster.${internal_domain},puppetmaster" --section master
+/opt/puppetlabs/bin/puppet config set node_terminus "exec" --section master
+# See below quickhack # TODO
+/opt/puppetlabs/bin/puppet config set external_nodes "/usr/local/bin/puppet-enc-ec2_wrapper" --section master
+
+/opt/puppetlabs/bin/puppet config set certname puppetmaster.${internal_domain}
+/opt/puppetlabs/bin/puppet config set server puppetmaster.${internal_domain}
 /opt/puppetlabs/bin/puppet config set autosign true --section master
 
 chkconfig puppetserver on
 service puppetserver start
 
+pip install puppet-enc-ec2
+# quick hack: original script has hard coded default region... # TODO
+sed -i 's/us-east-1/${default_region}/g' /usr/local/bin/puppet-enc-ec2
+
+# quick hack: puppet-enc-ec2 only works with *eu-central-1.compute.internal fqdn. Replace the internal domain # TODO
+cat <<"__EOF__" > /usr/local/bin/puppet-enc-ec2_wrapper
+#!/usr/bin/env python
+
+import sys, re, os
+s = sys.argv[1]
+m = re.search(r'(ip-.*-.*-.*-.*)\.${internal_domain}', s)
+real_private_dns = m.group(1) + '.${default_region}.compute.internal'
+# print(real_private_dns)
+os.system("/usr/local/bin/puppet-enc-ec2 " + real_private_dns )
+__EOF__
+
+chmod +x /usr/local/bin/puppet-enc-ec2_wrapper
 # reboot

@@ -77,15 +77,16 @@ module "puppet-testlab-asgroup" {
   ]
 
   tags_as_map = {
-    instance_role = "webserver"
-    environment   = "dev"
+    Role = "webserver"
+    Environment   = "dev"
   }
 }
 
 data "template_file" "puppet_master_init" {
   template = file("user_data/puppet_master.sh")
   vars = {
-    internal_domain = var.dns_zone_name
+    internal_domain = var.dns_zone_name,
+    default_region = var.aws_region
   }
 }
 
