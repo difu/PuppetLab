@@ -77,8 +77,8 @@ module "puppet-testlab-asgroup" {
   ]
 
   tags_as_map = {
-    Role = "webserver"
-    Environment   = "dev"
+    Role        = "webserver"
+    Environment = var.environment
   }
 }
 
@@ -86,7 +86,7 @@ data "template_file" "puppet_master_init" {
   template = file("user_data/puppet_master.sh")
   vars = {
     internal_domain = var.dns_zone_name,
-    default_region = var.aws_region
+    default_region  = var.aws_region
   }
 }
 
@@ -98,10 +98,12 @@ resource "aws_instance" "puppetmaster" {
   subnet_id                   = aws_subnet.public-a.id
   vpc_security_group_ids = [
     aws_security_group.puppet-public-ssh.id,
-  aws_security_group.puppet-public-puppet.id]
+    aws_security_group.puppet-public-puppet.id
+  ]
   user_data = base64encode(data.template_file.puppet_master_init.rendered)
   key_name  = var.key_name
   tags = {
-    Name = "Puppet master"
+    Name        = "Puppet master"
+    Environment = var.environment
   }
 }

@@ -1,5 +1,5 @@
-resource "aws_internet_gateway" "puppet-igw" {
-  vpc_id = aws_vpc.puppet_vpc.id
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
 
   tags = {
     name    = "${var.project} IGW"
@@ -9,11 +9,11 @@ resource "aws_internet_gateway" "puppet-igw" {
 
 //  Create a public subnet for each AZ.
 resource "aws_subnet" "public-a" {
-  vpc_id                  = aws_vpc.puppet_vpc.id
+  vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.public_subnet_cidr1
   availability_zone       = lookup(var.subnetaz1, var.aws_region)
   map_public_ip_on_launch = true
-  depends_on              = ["aws_internet_gateway.puppet-igw"]
+  depends_on              = [aws_internet_gateway.igw]
 
   tags = {
     name    = "${var.project} Public Subnet A"
@@ -22,11 +22,11 @@ resource "aws_subnet" "public-a" {
 }
 
 resource "aws_subnet" "public-b" {
-  vpc_id                  = aws_vpc.puppet_vpc.id
+  vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.public_subnet_cidr2
   availability_zone       = lookup(var.subnetaz2, var.aws_region)
   map_public_ip_on_launch = true
-  depends_on              = ["aws_internet_gateway.puppet-igw"]
+  depends_on              = [aws_internet_gateway.igw]
 
   tags = {
     name    = "${var.project} Public Subnet B"
@@ -35,11 +35,11 @@ resource "aws_subnet" "public-b" {
 }
 
 resource "aws_subnet" "public-c" {
-  vpc_id                  = aws_vpc.puppet_vpc.id
+  vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.public_subnet_cidr3
   availability_zone       = lookup(var.subnetaz3, var.aws_region)
   map_public_ip_on_launch = true
-  depends_on              = ["aws_internet_gateway.puppet-igw"]
+  depends_on              = [aws_internet_gateway.igw]
 
   tags = {
     name    = "${var.project} Public Subnet C"
@@ -49,11 +49,11 @@ resource "aws_subnet" "public-c" {
 
 
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.puppet_vpc.id
+  vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.puppet-igw.id
+    gateway_id = aws_internet_gateway.igw.id
   }
 
   tags = {
@@ -80,7 +80,7 @@ resource "aws_route_table_association" "public-c" {
 resource "aws_security_group" "puppet-public-ssh" {
   name        = "public-ssh"
   description = "Security group that allows SSH traffic from internet"
-  vpc_id      = aws_vpc.puppet_vpc.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     from_port   = 22
@@ -103,7 +103,7 @@ resource "aws_security_group" "puppet-public-ssh" {
 resource "aws_security_group" "puppet-public-ssl" {
   name        = "${var.project}-public-ssl"
   description = "Security group that allows SSL traffic to internet"
-  vpc_id      = aws_vpc.puppet_vpc.id
+  vpc_id      = aws_vpc.vpc.id
 
   egress {
     from_port   = "443"
@@ -128,7 +128,7 @@ resource "aws_security_group" "puppet-public-ssl" {
 resource "aws_security_group" "puppet-public-puppet" {
   name        = "${var.project}-public-puppet"
   description = "Security group that allows puppet traffic internally"
-  vpc_id      = aws_vpc.puppet_vpc.id
+  vpc_id      = aws_vpc.vpc.id
 
   egress {
     from_port   = "8140"
@@ -159,14 +159,14 @@ resource "aws_vpc_dhcp_options" "mydhcp" {
 }
 
 resource "aws_vpc_dhcp_options_association" "dns_resolver" {
-    vpc_id = aws_vpc.puppet_vpc.id
+    vpc_id = aws_vpc.vpc.id
     dhcp_options_id = aws_vpc_dhcp_options.mydhcp.id
 }
 
 resource "aws_route53_zone" "main" {
   name = var.dns_zone_name
   vpc {
-    vpc_id = aws_vpc.puppet_vpc.id
+    vpc_id = aws_vpc.vpc.id
   }
   comment = "Managed by x"
 }

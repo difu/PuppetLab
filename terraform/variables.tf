@@ -13,7 +13,7 @@ variable "vpc_cidr" {
 }
 
 variable "subnetaz1" {
-  type = "map"
+  type = map
 
   default = {
     eu-central-1 = "eu-central-1a"
@@ -21,7 +21,7 @@ variable "subnetaz1" {
 }
 
 variable "subnetaz2" {
-  type = "map"
+  type = map
 
   default = {
     eu-central-1 = "eu-central-1b"
@@ -29,7 +29,7 @@ variable "subnetaz2" {
 }
 
 variable "subnetaz3" {
-  type = "map"
+  type = map
 
   default = {
     eu-central-1 = "eu-central-1c"
@@ -70,4 +70,9 @@ variable "group_a_min_servers" {
 variable "group_a_max_servers" {
   default = "1"
   description = "Maximum number of hosts of group a"
+}
+
+variable "environment" {
+  default = "dev"
+  description = "The environment this infrastructure belongs to"
 }

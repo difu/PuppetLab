@@ -1,5 +1,5 @@
 resource "aws_iam_role" "puppet-client-instance-role" {
-  name = "puppet-client-instance-role"
+  name = "${var.environment}-puppet-client-instance-role"
 
   assume_role_policy = <<EOF
 {
@@ -19,7 +19,7 @@ EOF
 }
 
 resource "aws_iam_role" "puppet-master-instance-role" {
-  name = "puppet-master-instance-role"
+  name = "${var.environment}-puppet-master-instance-role"
 
   assume_role_policy = <<EOF
 {
@@ -39,7 +39,7 @@ EOF
 }
 
 resource "aws_iam_policy" "describe-tags" {
-  name        = "describe-tags"
+  name        = "${var.environment}-describe-tags"
   path        = "/EC2/"
   description = "This policy allows an instance to describe tags"
 
@@ -58,7 +58,7 @@ resource "aws_iam_policy" "describe-tags" {
 }
 
 resource "aws_iam_policy" "describe-instances" {
-  name        = "describe-instances"
+  name        = "${var.environment}-describe-instances"
   path        = "/EC2/"
   description = "This policy allows to describe instances"
 
@@ -78,24 +78,24 @@ resource "aws_iam_policy" "describe-instances" {
 
 //  Attach the policies to the role.
 resource "aws_iam_policy_attachment" "instance-describe-tags" {
-  name       = "instance-describe-tags"
+  name       = "${var.environment}instance-describe-tags"
   roles      = [aws_iam_role.puppet-client-instance-role.name]
   policy_arn = aws_iam_policy.describe-tags.arn
 }
 
 resource "aws_iam_policy_attachment" "instance-describe-instances" {
-  name       = "instance-describe-instances"
+  name       = "${var.environment}instance-describe-instances"
   roles      = [aws_iam_role.puppet-master-instance-role.name]
   policy_arn = aws_iam_policy.describe-instances.arn
 }
 
 //  Create a instance profile for the role.
 resource "aws_iam_instance_profile" "puppet-client-instance-profile" {
-  name = "puppet-client-instance-profile"
+  name = "${var.environment}puppet-client-instance-profile"
   role = aws_iam_role.puppet-client-instance-role.name
 }
 
 resource "aws_iam_instance_profile" "puppet-master-instance-profile" {
-  name = "puppet-master-instance-profile"
+  name = "${var.environment}puppet-master-instance-profile"
   role = aws_iam_role.puppet-master-instance-role.name
 }

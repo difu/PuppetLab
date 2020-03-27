@@ -9,11 +9,12 @@ provider "aws" {
   skip_requesting_account_id  = true
 }
 
-resource "aws_vpc" "puppet_vpc" {
+resource "aws_vpc" "vpc" {
     cidr_block = var.vpc_cidr
     enable_dns_support = true
     enable_dns_hostnames = true
     tags = {
-      Name = "Puppet"
+      Name = var.project
+      Environment   = var.environment
     }
 }
