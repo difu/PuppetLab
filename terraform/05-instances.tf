@@ -29,7 +29,7 @@ data "template_file" "puppet_client_init" {
 module "puppet-testlab-asgroup" {
   source = "github.com/terraform-aws-modules/terraform-aws-autoscaling"
 
-  name = "puppet-nodes-group-a"
+  name = module.puppet-client-webserver-labels.name
 
   lc_name = "puppet-nodes-lc"
 
@@ -76,10 +76,7 @@ module "puppet-testlab-asgroup" {
     },
   ]
 
-  tags_as_map = {
-    Role        = "webserver"
-    Environment = var.environment
-  }
+  tags_as_map = module.puppet-client-webserver-labels.tags
 }
 
 data "template_file" "puppet_master_init" {
@@ -102,8 +99,5 @@ resource "aws_instance" "puppetmaster" {
   ]
   user_data = base64encode(data.template_file.puppet_master_init.rendered)
   key_name  = var.key_name
-  tags = {
-    Name        = "Puppet master"
-    Environment = var.environment
-  }
+  tags = module.puppet-master-labels.tags
 }
