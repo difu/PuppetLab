@@ -22,6 +22,7 @@ rpm -Uvh https://yum.puppet.com/puppet-tools-release-el-6.noarch.rpm
 
 yum -y install puppetserver
 yum -y install pdk
+yum -y install git
 
 /opt/puppetlabs/bin/puppet config set dns_alt_names "puppetmaster.${internal_domain},puppetmaster" --section master
 /opt/puppetlabs/bin/puppet config set node_terminus "exec" --section master
