@@ -53,4 +53,6 @@ os.system("/usr/local/bin/puppet-enc-ec2 " + real_private_dns )
 __EOF__
 
 chmod +x /usr/local/bin/puppet-enc-ec2_wrapper
-# reboot
+
+git clone https://github.com/difu/puppetlab.git
+mkdir /etc/puppetlabs/code/environments/dev
