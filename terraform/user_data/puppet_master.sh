@@ -55,4 +55,12 @@ __EOF__
 chmod +x /usr/local/bin/puppet-enc-ec2_wrapper
 
 git clone https://github.com/difu/puppetlab.git
-mkdir /etc/puppetlabs/code/environments/dev
+
+mkdir -p /etc/puppetlabs/code/environments/${environment}/modules
+ln -s /puppetlab/puppet/manifests /etc/puppetlabs/code/environments/${environment}/manifests
+# TODO iterate over all modules!
+ln -s /puppetlab/puppet/modules/webserver /etc/puppetlabs/code/environments/${environment}/modules/webserver
+
+cat <<"__EOF__" > /environment
+${environment}
+__EOF__

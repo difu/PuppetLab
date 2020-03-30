@@ -1,0 +1,1 @@
+/opt/puppetlabs/bin/puppet module install puppetlabs-apache --environment $(cat /environment)

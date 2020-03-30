@@ -83,7 +83,8 @@ data "template_file" "puppet_master_init" {
   template = file("user_data/puppet_master.sh")
   vars = {
     internal_domain = var.dns_zone_name,
-    default_region  = var.aws_region
+    default_region  = var.aws_region,
+    environment     = var.environment,
   }
 }
 

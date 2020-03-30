@@ -6,6 +6,6 @@
     <title>Welcome to difus puppetlab!</title>
   </head>
   <body>
-    <p>Environment: <%= $the_env%></p>
+    <p>Environment: <%= $the_env %></p>
   </body>
 </html>
