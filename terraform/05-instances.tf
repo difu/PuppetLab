@@ -102,3 +102,18 @@ resource "aws_instance" "puppetmaster" {
   key_name  = var.key_name
   tags = module.puppet-master-labels.tags
 }
+
+resource "aws_instance" "postgresdb" {
+  ami                         = data.aws_ami.amazon_linux.id
+  instance_type               = "t2.micro"
+  iam_instance_profile        = aws_iam_instance_profile.postgresdb-instance-profile.name
+  associate_public_ip_address = "true"
+  subnet_id                   = aws_subnet.public-a.id
+  vpc_security_group_ids = [
+    aws_security_group.puppet-public-ssh.id,
+    aws_security_group.puppet-public-puppet.id
+  ]
+  user_data                    = base64encode(data.template_file.puppet_client_init.rendered)
+  key_name  = var.key_name
+  tags = module.potgresdb-labels.tags
+}

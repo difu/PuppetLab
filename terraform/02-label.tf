@@ -18,6 +18,16 @@ module "puppet-master-labels" {
   label_order = ["namespace", "environment", "name"]
 }
 
+module "potgresdb-labels" {
+  source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=master"
+  context     = module.base-labels.context
+  name        = "postgres"
+  label_order = ["namespace", "environment", "name"]
+    tags = {
+    "Role"    = "postgresdb"
+  }
+}
+
 module "puppet-client-webserver-labels" {
   source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=master"
   context     = module.base-labels.context
