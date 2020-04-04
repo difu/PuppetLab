@@ -22,3 +22,9 @@ class role::webserver (){
   }
 #  notify {inline_epp('Also prints <%= $the_host %>'):}
 }
+
+class role::postgresdb () {
+  class { 'postgresql::server':
+    postgres_password          => 'TPSrep0rt!',
+  }
+}
