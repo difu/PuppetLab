@@ -23,9 +23,19 @@ class role::webserver (){
 #  notify {inline_epp('Also prints <%= $the_host %>'):}
 }
 
+include apt
+
 class role::postgresdb () {
   apt::ppa { 'ppa:ubuntugis/ppa': }
   package { 'postgis':
     ensure => installed,
   }
+
+  exec { "Create database and install postgis extension":
+    user => 'postgres',
+    command => 'createdb -U postgres geodb; psql -Upostgres -d geodb -c "CREATE EXTENSION postgis;"',
+    path    => '/usr/bin/:/bin/',
+    onlyif  => "psql -lqt | cut -d \| -f 1 | grep -wq geodb; test $? -eq 1", # Check if the db already exists
+  }
+
 }
