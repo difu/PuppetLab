@@ -24,7 +24,8 @@ class role::webserver (){
 }
 
 class role::postgresdb () {
-  class { 'postgresql::server':
-    postgres_password          => 'TPSrep0rt!',
+  apt::ppa { 'ppa:ubuntugis/ppa': }
+  package { 'postgis':
+    ensure => installed,
   }
 }
