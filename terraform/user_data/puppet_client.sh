@@ -1,7 +1,22 @@
 #!/usr/bin/env bash
 
-rpm -Uvh http://yum.puppetlabs.com/puppet-release-el-6.noarch.rpm
-sudo yum -y install puppet
+dist=$(grep DISTRIB_ID /etc/*-release | awk -F '=' '{print $2}')
+
+if [ "$dist" == "Ubuntu" ]; then
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  apt install unzip
+  unzip awscliv2.zip
+  ./aws/install
+  wget https://apt.puppetlabs.com/puppet-release-bionic.deb
+  dpkg -i puppet-release-bionic.deb
+  apt update
+  apt install -y puppet-agent
+else
+  rpm -Uvh http://yum.puppetlabs.com/puppet-release-el-6.noarch.rpm
+  sudo yum -y install puppet
+fi
+
+
 
 cat <<"__EOF__" > /etc/puppetlabs/puppet/puppet.conf
 [main]
