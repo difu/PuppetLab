@@ -105,7 +105,7 @@ resource "aws_instance" "puppetmaster" {
 
 resource "aws_instance" "postgresdb" {
   ami                         = "ami-0b6f46ba4d94838a0"   // Ubuntu 18 "ami-dd3c0f36" // Centos
-  instance_type               = "t2.micro"
+  instance_type               = "t2.medium"
   iam_instance_profile        = aws_iam_instance_profile.postgresdb-instance-profile.name
   associate_public_ip_address = "true"
   subnet_id                   = aws_subnet.public-a.id
