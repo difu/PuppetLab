@@ -27,7 +27,20 @@ include apt
 
 class role::postgresdb () {
   apt::ppa { 'ppa:ubuntugis/ppa': }
+
   package { 'postgis':
+    ensure => installed,
+  }
+
+  package { 'python3.6-dev':
+    ensure => installed,
+  }
+
+  package { 'gdal-bin':
+    ensure => installed,
+  }
+
+  package { 'python-gdal':
     ensure => installed,
   }
 
