@@ -17,6 +17,12 @@ chmod 644 /etc/hosts
 
 yum -y remove java-1.7.0-openjdk -y
 
+yum clean all
+yum makecache
+yum update
+
+echo "Installing Puppet Server"
+
 rpm -Uvh http://yum.puppetlabs.com/puppet-release-el-6.noarch.rpm
 rpm -Uvh https://yum.puppet.com/puppet-tools-release-el-6.noarch.rpm
 
