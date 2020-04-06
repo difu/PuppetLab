@@ -179,3 +179,12 @@ resource "aws_route53_record" "puppetmaster" {
    records = [
      aws_instance.puppetmaster.private_ip]
 }
+
+resource "aws_route53_record" "postgresdb" {
+   zone_id = aws_route53_zone.main.zone_id
+   name = "postgresdb.${var.dns_zone_name}"
+   type = "A"
+   ttl = "300"
+   records = [
+     aws_instance.postgresdb.private_ip]
+}
