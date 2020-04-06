@@ -60,5 +60,5 @@ global : {
 }
 __EOF__
 
-/opt/puppetlabs/bin/puppet resource cron puppet-agent ensure=present user=root minute=* command='/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize --splay --splaylimit 60'
+# /opt/puppetlabs/bin/puppet resource cron puppet-agent ensure=present user=root minute=* command='/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize --splay --splaylimit 60'
 
