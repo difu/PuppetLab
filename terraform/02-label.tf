@@ -37,3 +37,13 @@ module "puppet-client-webserver-labels" {
     "Role"    = "webserver"
   }
 }
+
+module "geoserver-labels" {
+  source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=master"
+  context     = module.base-labels.context
+  name        = "geoserver"
+  label_order = ["namespace", "environment", "name"]
+  tags = {
+    "Role"    = "geoserver"
+  }
+}
