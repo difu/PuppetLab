@@ -52,3 +52,24 @@ class role::postgresdb () {
   }
 
 }
+
+class role::geoserver() {
+  package{ 'openjdk-8-jre-headless':
+    ensure => installed,
+  }
+
+  user { 'geoserver':
+    ensure     => 'present',
+    comment    => 'Home of geoserver',
+    managehome => true,
+  }
+
+  $geoserverfiles = [
+    'https://sourceforge.net/projects/geoserver/files/GeoServer/2.16.2/geoserver-2.16.2-bin.zip',
+    'https://sourceforge.net/projects/geoserver/files/GeoServer/2.16.1/extensions/geoserver-2.16.1-imagemosaic-jdbc-plugin.zip',
+  ]
+
+  wget::fetch { $geoserverfiles:
+    destination => '/tmp/',
+  }
+}
