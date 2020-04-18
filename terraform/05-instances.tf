@@ -20,7 +20,7 @@ data "aws_ami" "amazon_linux" {
 }
 
 data "template_file" "puppet_client_init" {
-  template = file("user_data/puppet_client.sh")
+  template = file("templates/user_data/puppet_client.sh")
   vars = {
     internal_domain = var.dns_zone_name
   }
@@ -133,7 +133,7 @@ module "geoserver-asgroup" {
 }
 
 data "template_file" "puppet_master_init" {
-  template = file("user_data/puppet_master.sh")
+  template = file("templates/user_data/puppet_master.sh")
   vars = {
     internal_domain = var.dns_zone_name,
     default_region  = var.aws_region,
@@ -169,4 +169,20 @@ resource "aws_instance" "postgresdb" {
   user_data                    = base64encode(data.template_file.puppet_client_init.rendered)
   key_name  = var.key_name
   tags = module.potgresdb-labels.tags
+}
+
+data "template_file" "ssh_config" {
+  template = file("templates/local/ssh_config.tmpl")
+  vars = {
+    database_private_ip = aws_instance.postgresdb.private_ip,
+    puppetmaster_public_ip = aws_instance.puppetmaster.public_ip
+    key_name = var.key_name
+  }
+}
+
+variable ssh_include_path {}
+
+resource "local_file" "ssh_config" {
+  content = data.template_file.ssh_config.rendered
+  filename = "${var.ssh_include_path}/ssh_config.out"
 }

@@ -1,0 +1,10 @@
+Host puppetmaster
+    HostName ${puppetmaster_public_ip}
+    User ec2-user
+    IdentityFile       ~/.ssh/${key_name}.pem
+
+Host database
+    HostName ${database_private_ip}
+    User ubuntu
+    IdentityFile       ~/.ssh/${key_name}.pem
+    ProxyCommand ssh -W %h:%p puppetmaster
